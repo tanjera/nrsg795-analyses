@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 
 from colorama import Fore, Back, Style
 import warnings
@@ -101,32 +102,31 @@ print("\n")
 
 
 
-fig, axs = plt.subplots(1, 2)
 
-# split quality of life by gender; then retain only qol column
+"""
+fig, axs = plt.subplots()
+
+# prep data; split quality of life by gender; then retain only qol column
 male_qol = df.loc[df["gender"] == 0].loc[:,"qol"]
 female_qol = df.loc[df["gender"] == 1].loc[:,"qol"]
 
 # subplot 0: boxplot w/ gender vs qol
-axs[0].boxplot([male_qol, female_qol])
-axs[0].set_xlabel('Gender', fontsize=13)
-axs[0].set_ylabel('Quality of Life', fontsize=13)
-axs[0].set(ylim=(0, 22))
-axs[0].set_yticks([0, 5, 10, 15, 20])
-axs[0].set_xticklabels(["Male", "Female"])
+axs.boxplot([male_qol, female_qol])
+axs.set_xlabel('Gender', fontsize=13)
+axs.set_ylabel('Quality of Life', fontsize=13)
+axs.set(ylim=(0, 22))
+axs.set_yticks([0, 5, 10, 15, 20])
+axs.set_xticklabels(["Male", "Female"])
+"""
 
 
-# split quality of life by gender; then retain only qol column
-male_qol = df.loc[df["gender"] == 0].loc[:,"qol"]
-female_qol = df.loc[df["gender"] == 1].loc[:,"qol"]
+wy_shift_qol = df.loc[df["shift"] != 9].loc[:,["workyrs", "shift", "qol"]]
+wy_shift_qol["shift"] = wy_shift_qol["shift"].replace(1, "Night").replace(2, "Evening").replace(3, "Day")
 
-# subplot 1: scatter w/ age vs qol colored by shift
-axs[1].boxplot([male_qol, female_qol])
-axs[1].set(ylabel='Quality of Life', ylim=(0, 22))
-axs[1].set(xlabel='Gender')
-axs[1].set_yticks([0, 5, 10, 15, 20])
-axs[1].set_xticklabels(["Male", "Female"])
-
+axs = sns.scatterplot(x="workyrs", y="qol", data=wy_shift_qol, hue="shift", palette="tab10", legend=True)
+axs.set_xlabel('Years of Work', fontsize=13)
+axs.set_ylabel('Quality of Life', fontsize=13)
+plt.legend(title="Shift")
 
 #show_plots flag for unmasking console output
 show_plots = True
