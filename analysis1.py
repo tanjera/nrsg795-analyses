@@ -109,8 +109,9 @@ female_qol = df.loc[df["gender"] == 1].loc[:,"qol"]
 
 # subplot 0: boxplot w/ gender vs qol
 axs[0].boxplot([male_qol, female_qol])
-axs[0].set(ylabel='Quality of Life', ylim=(0, 22))
-axs[0].set(xlabel='Gender')
+axs[0].set_xlabel('Gender', fontsize=13)
+axs[0].set_ylabel('Quality of Life', fontsize=13)
+axs[0].set(ylim=(0, 22))
 axs[0].set_yticks([0, 5, 10, 15, 20])
 axs[0].set_xticklabels(["Male", "Female"])
 
