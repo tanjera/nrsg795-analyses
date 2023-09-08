@@ -100,9 +100,6 @@ print("\n")
 # ------------------------------------------------------------
 
 
-
-
-
 """
 fig, axs = plt.subplots()
 
@@ -110,23 +107,37 @@ fig, axs = plt.subplots()
 male_qol = df.loc[df["gender"] == 0].loc[:,"qol"]
 female_qol = df.loc[df["gender"] == 1].loc[:,"qol"]
 
-# subplot 0: boxplot w/ gender vs qol
+# boxplot w/ gender vs qol
 axs.boxplot([male_qol, female_qol])
-axs.set_xlabel('Gender', fontsize=13)
-axs.set_ylabel('Quality of Life', fontsize=13)
+axs.set_xlabel('Gender', fontsize=12)
+axs.set_ylabel('Quality of Life', fontsize=12)
 axs.set(ylim=(0, 22))
 axs.set_yticks([0, 5, 10, 15, 20])
 axs.set_xticklabels(["Male", "Female"])
-"""
 
 
+# prep data; rename categories for legend presentation
 wy_shift_qol = df.loc[df["shift"] != 9].loc[:,["workyrs", "shift", "qol"]]
 wy_shift_qol["shift"] = wy_shift_qol["shift"].replace(1, "Night").replace(2, "Evening").replace(3, "Day")
 
+# scatterplot w/ workyrs vs qol w/ shift as color
 axs = sns.scatterplot(x="workyrs", y="qol", data=wy_shift_qol, hue="shift", palette="tab10", legend=True)
-axs.set_xlabel('Years of Work', fontsize=13)
-axs.set_ylabel('Quality of Life', fontsize=13)
+axs.set_xlabel('Years of Work', fontsize=12)
+axs.set_ylabel('Quality of Life', fontsize=12)
 plt.legend(title="Shift")
+"""
+
+# prep data; rename categories for legend presentation
+age_marital_qol = df.loc[df["age"] != 99].loc[:,["age", "marital", "qol"]]
+age_marital_qol["marital"] = age_marital_qol["marital"].replace(1, "Never Married").replace(2, "Married").replace(3, "Cohabitating")
+age_marital_qol["marital"] = age_marital_qol["marital"].replace(4, "Separated").replace(5, "Widowed").replace(6, "Divorced")
+
+# scatterplot w/ age vs qol w/ marital as color
+axs = sns.scatterplot(x="age", y="qol", data=age_marital_qol, hue="marital", palette="tab10", legend=True)
+axs.set_xlabel('Age (Years)', fontsize=12)
+axs.set_ylabel('Quality of Life', fontsize=12)
+plt.legend(title="Marital Status")
+
 
 #show_plots flag for unmasking console output
 show_plots = True
