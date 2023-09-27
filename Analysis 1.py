@@ -21,7 +21,7 @@ def validate_data(column, missing_code, to_exit: bool = True):
 
 
 # import main data file
-df = pd.read_excel(r'C:\Users\Ibi\Google Drive\School, UMSON\2023.FA, NRSG 795 (Biostatistics for Evidence Based Practice)\Analysis 1\Data Workbook.xlsx', 
+df = pd.read_excel(r'C:\Users\Ibi\Google Drive\School, UMSON\2023.FA, NRSG 795 (Biostatistics for Evidence Based Practice)\Analysis 1\NRSG795_Analysis1_Fall23.xlsx', 
                    sheet_name="NRSG795_sum20")
 
 # ------------------------------------------------------------
