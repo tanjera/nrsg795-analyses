@@ -122,13 +122,16 @@ print("G1 Smok2 Shapiro-Wilk Test: \t\tt = %.2f" % shapiro_g1_smok2.statistic, "
 shapiro_g2_smok2 = shapiro(g2_smok2)
 print("G2 Smok2 Shapiro-Wilk Test: \t\tt = %.2f" % shapiro_g2_smok2.statistic, "\t\tp = %.4f" % shapiro_g2_smok2.pvalue)
 
-levene_smok2 = levene(g1_smok2, g2_smok2)
-print("Smok2 Levene's Variance: \t\t\tt = %.2f" % levene_smok2.statistic, "\t\tp = %.4f" % levene_smok2.pvalue)
+levene_g1_smok = levene(g1_smok1, g1_smok2)
+print("G1_Smok? Levene's Variance: \t\t\tt = %.2f" % levene_g1_smok.statistic, "\t\tp = %.4f" % levene_g1_smok.pvalue)
+
+levene_g2_smok = levene(g2_smok1, g2_smok2)
+print("G2_Smok? Levene's Variance: \t\t\tt = %.2f" % levene_g2_smok.statistic, "\t\tp = %.4f" % levene_g2_smok.pvalue)
 
 p1ttest_g1_smok = stats.ttest_rel(g1_smok1, g1_smok2, alternative="greater")
 print("G1_Smok? Paired 1-sided t Test: \tt = %.2f" % p1ttest_g1_smok.statistic, "\t\tp = %.4f" % p1ttest_g1_smok.pvalue)
 
 p1ttest_g2_smok = stats.ttest_rel(g2_smok1, g2_smok2, alternative="greater")
-print("G1_Smok? Paired 1-sided t Test: \tt = %.2f" % p1ttest_g2_smok.statistic, "\t\tp = %.4f" % p1ttest_g2_smok.pvalue)
+print("G2_Smok? Paired 1-sided t Test: \tt = %.2f" % p1ttest_g2_smok.statistic, "\t\tp = %.4f" % p1ttest_g2_smok.pvalue)
 
 
