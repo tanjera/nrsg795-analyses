@@ -81,12 +81,14 @@ print("G1 Smok1 Shapiro-Wilk Test: \t\tt = %.2f" % shapiro_g1_smok1.statistic, "
 shapiro_g2_smok1 = shapiro(g2_smok1)
 print("G2 Smok1 Shapiro-Wilk Test: \t\tt = %.2f" % shapiro_g2_smok1.statistic, "\t\tp = %.4f" % shapiro_g2_smok1.pvalue)
 
+print("")
 # Test for homogeneity of variance
 # Since g1_smok1 and g2_smok2 are normally distributed (as shown by Shapiro-Wilk test),
 # Will use levene's Test; If p > 0.05, H0 (equal/homogenous variances) is accepted
 levene_smok1 = levene(g1_smok1, g2_smok1)
 print("Smok1 Levene's Variance: \t\t\tt = %.2f" % levene_smok1.statistic, "\t\tp = %.4f" % levene_smok1.pvalue)
 
+print("")
 # Test for comparison of independent group means
 # Independent t Test: H0 (population means are equal) versus H1 (p < 0.05, population means are not equal)
 # Note: test is inherently 2-tailed (outputs positive and negative results); for a 1-tailed test, p/2 < alpha
@@ -94,6 +96,7 @@ print("Smok1 Levene's Variance: \t\t\tt = %.2f" % levene_smok1.statistic, "\t\tp
 # Also for 1-tailed test, need to set alternative hypothesis in function!!
 ind_ttest_smok1 = stats.ttest_ind(g1_smok1, g2_smok1)
 print("Smok1 Independent t Test: \t\t\tt = %.2f" % ind_ttest_smok1.statistic, "\t\tp = %.4f" % ind_ttest_smok1.pvalue)
+print(" └→ \t", ind_ttest_smok1.confidence_interval(confidence_level=0.95))
 
 # ------------------------------------------------------------
 # PART 3: COMPARING MEANS OF A SINGLE GROUP, PRE-TEST POST-TEST
@@ -122,16 +125,21 @@ print("G1 Smok2 Shapiro-Wilk Test: \t\tt = %.2f" % shapiro_g1_smok2.statistic, "
 shapiro_g2_smok2 = shapiro(g2_smok2)
 print("G2 Smok2 Shapiro-Wilk Test: \t\tt = %.2f" % shapiro_g2_smok2.statistic, "\t\tp = %.4f" % shapiro_g2_smok2.pvalue)
 
+print("")
+
 levene_g1_smok = levene(g1_smok1, g1_smok2)
-print("G1_Smok? Levene's Variance: \t\t\tt = %.2f" % levene_g1_smok.statistic, "\t\tp = %.4f" % levene_g1_smok.pvalue)
+print("G1_Smok? Levene's Variance: \t\tt = %.2f" % levene_g1_smok.statistic, "\t\tp = %.4f" % levene_g1_smok.pvalue)
 
 levene_g2_smok = levene(g2_smok1, g2_smok2)
-print("G2_Smok? Levene's Variance: \t\t\tt = %.2f" % levene_g2_smok.statistic, "\t\tp = %.4f" % levene_g2_smok.pvalue)
+print("G2_Smok? Levene's Variance: \t\tt = %.2f" % levene_g2_smok.statistic, "\t\tp = %.4f" % levene_g2_smok.pvalue)
+
+print("")
 
 p1ttest_g1_smok = stats.ttest_rel(g1_smok1, g1_smok2, alternative="greater")
 print("G1_Smok? Paired 1-sided t Test: \tt = %.2f" % p1ttest_g1_smok.statistic, "\t\tp = %.4f" % p1ttest_g1_smok.pvalue)
+print(" └→ \t", p1ttest_g1_smok.confidence_interval(confidence_level=0.95))
 
 p1ttest_g2_smok = stats.ttest_rel(g2_smok1, g2_smok2, alternative="greater")
 print("G2_Smok? Paired 1-sided t Test: \tt = %.2f" % p1ttest_g2_smok.statistic, "\t\tp = %.4f" % p1ttest_g2_smok.pvalue)
-
+print(" └→ \t", p1ttest_g2_smok.confidence_interval(confidence_level=0.95))
 
