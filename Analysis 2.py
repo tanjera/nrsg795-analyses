@@ -5,7 +5,7 @@ import seaborn as sns
 
 from scipy import stats
 from scipy.stats import shapiro
-from scipy.stats import bartlett
+from scipy.stats import levene
 
 
 # import main data file
@@ -83,9 +83,9 @@ print("G2 Smok1 Shapiro-Wilk Test: \t\tt = %.2f" % shapiro_g2_smok1.statistic, "
 
 # Test for homogeneity of variance
 # Since g1_smok1 and g2_smok2 are normally distributed (as shown by Shapiro-Wilk test),
-# Will use Bartlett's Test; If p > 0.05, H0 (equal/homogenous variances) is accepted
-bartlett_smok1 = bartlett(g1_smok1, g2_smok1)
-print("Smok1 Bartlett's Variance: \t\t\tt = %.2f" % bartlett_smok1.statistic, "\t\tp = %.4f" % bartlett_smok1.pvalue)
+# Will use levene's Test; If p > 0.05, H0 (equal/homogenous variances) is accepted
+levene_smok1 = levene(g1_smok1, g2_smok1)
+print("Smok1 Levene's Variance: \t\t\tt = %.2f" % levene_smok1.statistic, "\t\tp = %.4f" % levene_smok1.pvalue)
 
 # Test for comparison of independent group means
 # Independent t Test: H0 (population means are equal) versus H1 (p < 0.05, population means are not equal)
@@ -122,8 +122,8 @@ print("G1 Smok2 Shapiro-Wilk Test: \t\tt = %.2f" % shapiro_g1_smok2.statistic, "
 shapiro_g2_smok2 = shapiro(g2_smok2)
 print("G2 Smok2 Shapiro-Wilk Test: \t\tt = %.2f" % shapiro_g2_smok2.statistic, "\t\tp = %.4f" % shapiro_g2_smok2.pvalue)
 
-bartlett_smok2 = bartlett(g1_smok2, g2_smok2)
-print("Smok2 Bartlett's Variance: \t\t\tt = %.2f" % bartlett_smok2.statistic, "\t\tp = %.4f" % bartlett_smok2.pvalue)
+levene_smok2 = levene(g1_smok2, g2_smok2)
+print("Smok2 Levene's Variance: \t\t\tt = %.2f" % levene_smok2.statistic, "\t\tp = %.4f" % levene_smok2.pvalue)
 
 p1ttest_g1_smok = stats.ttest_rel(g1_smok1, g1_smok2, alternative="greater")
 print("G1_Smok? Paired 1-sided t Test: \tt = %.2f" % p1ttest_g1_smok.statistic, "\t\tp = %.4f" % p1ttest_g1_smok.pvalue)
