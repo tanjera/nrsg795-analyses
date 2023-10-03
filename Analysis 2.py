@@ -105,7 +105,8 @@ print("")
 # Also for 1-tailed test, need to set alternative hypothesis in function!!
 ind_ttest_smok1 = stats.ttest_ind(g1_smok1, g2_smok1)
 print("Smok1 Independent t Test: \t\t\tt = %.2f" % ind_ttest_smok1.statistic, "\t\tp = %.4f" % ind_ttest_smok1.pvalue)
-print(" └→ \t", ind_ttest_smok1.confidence_interval(confidence_level=0.95))
+ind_ttest_smok1_ci95 = ind_ttest_smok1.confidence_interval(confidence_level=0.95)
+print(" └→ CI 95:\t%.2f" % ind_ttest_smok1_ci95.low, "- %.2f" % ind_ttest_smok1_ci95.high)
 
 # ------------------------------------------------------------
 # PART 3: COMPARING MEANS OF A SINGLE GROUP, PRE-TEST POST-TEST
