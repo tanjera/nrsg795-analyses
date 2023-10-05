@@ -169,6 +169,31 @@ dep1lev3_g1_smok2 = df[(df.dep1_lev3 == 1)].loc[:, "smok2"]
 dep1lev3_g2_smok2 = df[(df.dep1_lev3 == 2)].loc[:, "smok2"]
 dep1lev3_g3_smok2 = df[(df.dep1_lev3 == 3)].loc[:, "smok2"]
 
+shapiro_dep1lev3_g1 = shapiro(dep1lev3_g1_smok2)
+print("dep1lev3 G1 Shapiro-Wilk Test: \t\tt = %.2f" % shapiro_dep1lev3_g1.statistic, "\t\tp = %.4f" % shapiro_dep1lev3_g1.pvalue)
+shapiro_dep1lev3_g2 = shapiro(dep1lev3_g2_smok2)
+print("dep1lev3 G2 Shapiro-Wilk Test: \t\tt = %.2f" % shapiro_dep1lev3_g2.statistic, "\t\tp = %.4f" % shapiro_dep1lev3_g2.pvalue)
+shapiro_dep1lev3_g3 = shapiro(dep1lev3_g3_smok2)
+print("dep1lev3 G3 Shapiro-Wilk Test: \t\tt = %.2f" % shapiro_dep1lev3_g3.statistic, "\t\tp = %.4f" % shapiro_dep1lev3_g3.pvalue)
+
+print("")
+
+levene_dep1lev3_smok2 = levene(dep1lev3_g1_smok2, dep1lev3_g2_smok2, dep1lev3_g3_smok2)
+print("dep1lev3 G? Levene's Variance: \t\tt = %.2f" % levene_dep1lev3_smok2.statistic, "\t\tp = %.4f" % levene_dep1lev3_smok2.pvalue)
+
+print("")
+
 anova_dep1lev3_smok2 = f_oneway(dep1lev3_g1_smok2, dep1lev3_g2_smok2, dep1lev3_g3_smok2)
-print("dep1lev3 G? One-Way ANOVA: \t\tF = %.2f" % anova_dep1lev3_smok2.statistic, "\t\tp = %.4f" % anova_dep1lev3_smok2.pvalue)
+print("dep1lev3 G? One-Way ANOVA: \t\t\tF = %.2f" % anova_dep1lev3_smok2.statistic, "\t\tp = %.4f" % anova_dep1lev3_smok2.pvalue)
+
+
+
+
+
+
+
+
+
+
+
 
