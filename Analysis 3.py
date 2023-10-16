@@ -134,3 +134,14 @@ df_eat__routinely = df.loc[(df.eat == 4)].loc[:, "eat"]
 print("- routinely: \tn =", len(df_eat__routinely), "\t\t%%: %.1f" % (len(df_eat__routinely) / len(df_eat__all) * 100))
 
 print("")
+
+
+# ------------------------------------------------------------
+# SCATTERPLOT: VISUALIZE H1
+# ------------------------------------------------------------
+
+satwt_bfcur = df.loc[(pd.notna(df.satwtbf)) & (pd.notna(df.satcurwt))].loc[:,["satwtbf", "satcurwt"]]
+axs = sns.scatterplot(x="satwtbf", y="satcurwt", data=satwt_bfcur, palette="tab10", legend=False)
+axs.set_xlabel('Satisfaction with Weight, 5 Years Ago', fontsize=12)
+axs.set_ylabel('Satisfaction with Weight, Current', fontsize=12)
+plt.show()
