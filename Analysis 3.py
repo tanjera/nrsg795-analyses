@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
+import pingouin as pg
+
 from scipy import stats
 from scipy.stats import sem
 from scipy.stats import shapiro
@@ -135,13 +137,38 @@ print("- routinely: \tn =", len(df_eat__routinely), "\t\t%%: %.1f" % (len(df_eat
 
 print("")
 
-
 # ------------------------------------------------------------
-# SCATTERPLOT: VISUALIZE H1
+# Testing Hypotheses 1a & 1b
 # ------------------------------------------------------------
 
+# Check assumptions for H1a & H1b: multivariate normality w/ pngn.multivariate_normality()
 satwt_bfcur = df.loc[(pd.notna(df.satwtbf)) & (pd.notna(df.satcurwt))].loc[:,["satwtbf", "satcurwt"]]
-axs = sns.scatterplot(x="satwtbf", y="satcurwt", data=satwt_bfcur, palette="tab10", legend=False)
+
+# Pearson r Correlation
+pearson_satwt = stats.pearsonr(satwt_bfcur.loc[:, "satwtbf"], satwt_bfcur.loc[:, "satcurwt"])
+print("satwt_bfcur Pearson r Correlation: \t\t\tr = %.2f" % pearson_satwt.statistic, "\t\tp = %.4f" % pearson_satwt.pvalue)
+
+# Henze-Zirkler multivariate normality test
+hzmn_satwt = pg.multivariate_normality(satwt_bfcur)
+print("satwt_bfcur Henze-Zirkler multi normality: \tt = %.2f" % hzmn_satwt.hz, "\t\tp = %.4f" % hzmn_satwt.pval)
+
+# Check assumptions by visualizing histogram of satwtbf and satwtcur
+axs = sns.histplot(data=satwt_bfcur.loc[:, "satwtbf"], bins=10)
+plt.show()
+axs.get_figure().clf()
+
+axs = sns.histplot(data=satwt_bfcur.loc[:, "satcurwt"], bins=10)
+plt.show()
+axs.get_figure().clf()
+
+# Linear regression of satwt bf vs. cur
+linreg_satwt = stats.linregress(satwt_bfcur.loc[:, "satwtbf"], satwt_bfcur.loc[:, "satcurwt"])
+
+# Scatterplot for satwt bf vs. cur
+axs = sns.scatterplot(x="satwtbf", y="satcurwt", data=satwt_bfcur, palette="tab10", legend=False, alpha=0.3)
 axs.set_xlabel('Satisfaction with Weight, 5 Years Ago', fontsize=12)
 axs.set_ylabel('Satisfaction with Weight, Current', fontsize=12)
+xseq = np.linspace(0, 10, num=100)
+axs.plot(xseq, linreg_satwt.intercept + linreg_satwt.slope * xseq, color="#3590ae", lw=3);
 plt.show()
+axs.get_figure().clf()
