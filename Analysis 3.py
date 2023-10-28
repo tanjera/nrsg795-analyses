@@ -1,9 +1,8 @@
+import math
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-
-import pingouin as pg
 
 from scipy import stats
 from scipy.stats import sem
@@ -141,33 +140,43 @@ print("")
 # Testing Hypotheses 1a & 1b
 # ------------------------------------------------------------
 
-# Check assumptions for H1a & H1b: multivariate normality w/ pngn.multivariate_normality()
+# Check assumptions for H1a & H1b
 satwt_bfcur = df.loc[(pd.notna(df.satwtbf)) & (pd.notna(df.satcurwt))].loc[:,["satwtbf", "satcurwt"]]
 
 # Pearson r Correlation
 pearson_satwt = stats.pearsonr(satwt_bfcur.loc[:, "satwtbf"], satwt_bfcur.loc[:, "satcurwt"])
 print("satwt_bfcur Pearson r Correlation: \t\t\tr = %.2f" % pearson_satwt.statistic, "\t\tp = %.4f" % pearson_satwt.pvalue)
 
-# Henze-Zirkler multivariate normality test
-hzmn_satwt = pg.multivariate_normality(satwt_bfcur)
-print("satwt_bfcur Henze-Zirkler multi normality: \tt = %.2f" % hzmn_satwt.hz, "\t\tp = %.4f" % hzmn_satwt.pval)
-
 # Check assumptions by visualizing histogram of satwtbf and satwtcur
 axs = sns.histplot(data=satwt_bfcur.loc[:, "satwtbf"], bins=10)
+axs.set_xlabel('Satisfaction with Weight, 5 Years Ago', fontsize=10)
 plt.show()
 axs.get_figure().clf()
 
 axs = sns.histplot(data=satwt_bfcur.loc[:, "satcurwt"], bins=10)
+axs.set_xlabel('Satisfaction with Weight, Current', fontsize=10)
 plt.show()
 axs.get_figure().clf()
 
-# Linear regression of satwt bf vs. cur
+# Linear regression
 linreg_satwt = stats.linregress(satwt_bfcur.loc[:, "satwtbf"], satwt_bfcur.loc[:, "satcurwt"])
+print("linreg_satwt:\t intercept: %.1f" % linreg_satwt.intercept, "\tslope (beta): %.1f" % linreg_satwt.slope)
+print(" └→ \t\t\tr: %.2f" % linreg_satwt.rvalue, "\t\tp: %.4f" % linreg_satwt.pvalue)
+print(" └→ \t\t\tr^2: %.2f" % math.pow(linreg_satwt.rvalue, 2))
+
+# F-statistic (variances) and significance of model
+variance1 = np.var(satwt_bfcur.loc[:, "satwtbf"], ddof=1)
+variance2 = np.var(satwt_bfcur.loc[:, "satcurwt"], ddof=1)
+f_value = variance1 / variance2
+df1 = len(satwt_bfcur.loc[:, "satwtbf"]) - 1
+df2 = len(satwt_bfcur.loc[:, "satcurwt"]) - 1
+p_value = stats.f.cdf(f_value, df1, df2)
+print("linreg signif:\t f: %.2f" % f_value, "\tp: %.4f" % p_value)
 
 # Scatterplot for satwt bf vs. cur
 axs = sns.scatterplot(x="satwtbf", y="satcurwt", data=satwt_bfcur, palette="tab10", legend=False, alpha=0.3)
-axs.set_xlabel('Satisfaction with Weight, 5 Years Ago', fontsize=12)
-axs.set_ylabel('Satisfaction with Weight, Current', fontsize=12)
+axs.set_xlabel('Satisfaction with Weight, 5 Years Ago', fontsize=10)
+axs.set_ylabel('Satisfaction with Weight, Current', fontsize=10)
 xseq = np.linspace(0, 10, num=100)
 axs.plot(xseq, linreg_satwt.intercept + linreg_satwt.slope * xseq, color="#3590ae", lw=3);
 plt.show()
