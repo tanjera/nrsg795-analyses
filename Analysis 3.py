@@ -10,6 +10,8 @@ from scipy.stats import shapiro
 from scipy.stats import levene
 from scipy.stats import f_oneway
 
+import statsmodels.api as sm
+
 # import main data file
 df = pd.read_excel(r'C:\Users\Ibi\Google Drive\School, UMSON\2023.FA, NRSG 795 (Biostatistics for Evidence Based Practice)\Analysis 3\NRSG795_Fall23 Analysis 3.xlsx',
                    sheet_name="NRSG795_myclients")
@@ -159,19 +161,10 @@ plt.show()
 axs.get_figure().clf()
 
 # Linear regression
-linreg_satwt = stats.linregress(satwt_bfcur.loc[:, "satwtbf"], satwt_bfcur.loc[:, "satcurwt"])
+linreg_satwt = stats.linregress(satwt_bfcur.loc[:, "satwtbf"], y=satwt_bfcur.loc[:, "satcurwt"])
 print("linreg_satwt:\t intercept: %.1f" % linreg_satwt.intercept, "\tslope (beta): %.1f" % linreg_satwt.slope)
 print(" └→ \t\t\tr: %.2f" % linreg_satwt.rvalue, "\t\tp: %.4f" % linreg_satwt.pvalue)
 print(" └→ \t\t\tr^2: %.2f" % math.pow(linreg_satwt.rvalue, 2))
-
-# F-statistic (variances) and significance of model
-variance1 = np.var(satwt_bfcur.loc[:, "satwtbf"], ddof=1)
-variance2 = np.var(satwt_bfcur.loc[:, "satcurwt"], ddof=1)
-f_value = variance1 / variance2
-df1 = len(satwt_bfcur.loc[:, "satwtbf"]) - 1
-df2 = len(satwt_bfcur.loc[:, "satcurwt"]) - 1
-p_value = stats.f.cdf(f_value, df1, df2)
-print("linreg signif:\t f: %.2f" % f_value, "\tp: %.4f" % p_value)
 
 # Scatterplot for satwt bf vs. cur
 axs = sns.scatterplot(x="satwtbf", y="satcurwt", data=satwt_bfcur, palette="tab10", legend=False, alpha=0.3)
