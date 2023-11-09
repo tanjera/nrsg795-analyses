@@ -79,14 +79,21 @@ plt.clf()
 # Setup, fit, and display statistics on multiple linear regression model
 exog = df.loc[:, ["age", "sex", "anxiety", "confid", "fearstat"]]
 endog = df.loc[:, "exam"]
-#exog = df.loc[:, ["Age", "Sex", "Anxiety", "Confidence", "Fear"]]
-#endog = df.loc[:, "Exam Score"]
 exog = sm.tools.add_constant(exog)
-
 model = sm.OLS(endog, exog).fit()
-print(">>>> Regression Result")
+print(">>>> Regression Result with ALL exogenous variables")
 print(model.summary())
 
+exog = df.loc[:, ["age", "sex", "confid", "fearstat"]]
+endog = df.loc[:, "exam"]
+exog = sm.tools.add_constant(exog)
+model = sm.OLS(endog, exog).fit()
+print("\n\n>>>> Regression Result withOUT anxiety")
+print(model.summary())
 
-
-
+exog = df.loc[:, ["age", "sex", "anxiety", "fearstat"]]
+endog = df.loc[:, "exam"]
+exog = sm.tools.add_constant(exog)
+model = sm.OLS(endog, exog).fit()
+print("\n\n>>>> Regression Result withOUT confid")
+print(model.summary())
