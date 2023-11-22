@@ -15,7 +15,8 @@ import statsmodels.api as sm
 # import main data file
 df = pd.read_excel(r'C:\Users\Ibi\Google Drive\School, UMSON\2023.FA, NRSG 795 (Biostatistics for Evidence Based Practice)\Analysis 4\NRSG795 Fall23 Analysis 4.xlsx',
                    sheet_name="statsurvey")
-
+df2 = pd.read_excel(r'C:\Users\Ibi\Google Drive\School, UMSON\2023.FA, NRSG 795 (Biostatistics for Evidence Based Practice)\Analysis 4\oxygensat_fall23.xlsx',
+                   sheet_name="calculations")
 
 # ------------------------------------------------------------
 # Part A: Multiple Linear Regression
@@ -77,6 +78,7 @@ plt.clf()
 """
 
 # Setup, fit, and display statistics on multiple linear regression model
+"""
 exog = df.loc[:, ["age", "sex", "anxiety", "confid", "fearstat"]]
 endog = df.loc[:, "exam"]
 exog = sm.tools.add_constant(exog)
@@ -97,3 +99,29 @@ exog = sm.tools.add_constant(exog)
 model = sm.OLS(endog, exog).fit()
 print("\n\n>>>> Regression Result withOUT confid")
 print(model.summary())
+"""
+
+# ------------------------------------------------------------
+# Part D: QI Run Chart
+# ------------------------------------------------------------
+
+# Display run chart
+
+plt.figure(figsize=(10, 4))
+sns.set_palette(["#4361ee", "#4eadd9", "#dedb1d"])
+sns.lineplot(data=df2, x="Week", y="Charts Correct %", marker="o", linewidth=2, markersize=8)
+sns.lineplot(data=df2, x="Week", y="Median", linewidth=2)
+sns.lineplot(data=df2, x="Week", y="Target", linewidth=2)
+plt.xticks(range(1, 21, 1))
+plt.yticks(range(0, 101, 10))
+plt.show()
+plt.clf()
+
+
+
+
+
+
+
+
+
