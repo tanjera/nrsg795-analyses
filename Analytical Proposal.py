@@ -64,13 +64,34 @@ print("\n")
 
 df_boxplot = df.loc[:, ["diag_condition", "asp2change"]]
 df_boxplot["diag_condition"] = df_boxplot["diag_condition"].replace(1, "Bipolar").replace(2, "Schizophrenia").replace(3, "Major Depressive Disorder")
-axs = sns.boxplot(data=df_boxplot, x="diag_condition", y="asp2change", width=0.5)
+axs = sns.boxplot(data=df_boxplot, x="diag_condition", y="asp2change", width=0.65)
 axs.set_xlabel("Diagnosis", labelpad=10)
 axs.set_ylabel("Aspiration to Change Physical Activity", labelpad=10)
 plt.yticks(range(0, 51, 5))
 #plt.show()
 plt.clf()
 
+print (">>>> Descriptive Statistics for Boxplot: Aspiration to Change per Diagnosis Group")
+df_aspchange_bipolar = df.loc[df["diag_condition"] == 1].loc[:, "asp2change"]
+print("asp2change / bipolar: \tn =", len(df_aspchange_bipolar), "\t\tMean: %.1f" % df_aspchange_bipolar.mean(), "\tMedian: %.1f" % df_aspchange_bipolar.median(),
+      "\tSt Dev: %.1f" % df_aspchange_bipolar.std(),
+      "\n\t\t\t\t\t\t\t\t\tRange: ", df_aspchange_bipolar.min(), "-", df_aspchange_bipolar.max(),
+      "\t\t\tIQR: %.1f" % (df_aspchange_bipolar.median() - (0.6745 * df_aspchange_bipolar.std())), "-",
+      "%.1f" % (df_aspchange_bipolar.median() + (0.6745 * df_aspchange_bipolar.std())))
+
+df_aspchange_schizoph = df.loc[df["diag_condition"] == 2].loc[:, "asp2change"]
+print("asp2change / schizoph: \tn =", len(df_aspchange_schizoph), "\t\tMean: %.1f" % df_aspchange_schizoph.mean(), "\tMedian: %.1f" % df_aspchange_schizoph.median(),
+      "\tSt Dev: %.1f" % df_aspchange_schizoph.std(),
+      "\n\t\t\t\t\t\t\t\t\tRange: ", df_aspchange_schizoph.min(), "-", df_aspchange_schizoph.max(),
+      "\t\t\tIQR: %.1f" % (df_aspchange_schizoph.median() - (0.6745 * df_aspchange_schizoph.std())), "-",
+      "%.1f" % (df_aspchange_schizoph.median() + (0.6745 * df_aspchange_schizoph.std())))
+
+df_aspchange_mdd = df.loc[df["diag_condition"] == 3].loc[:, "asp2change"]
+print("asp2change / mdd: \t\tn =", len(df_aspchange_mdd), "\t\tMean: %.1f" % df_aspchange_mdd.mean(), "\tMedian: %.1f" % df_aspchange_mdd.median(),
+      "\tSt Dev: %.1f" % df_aspchange_mdd.std(),
+      "\n\t\t\t\t\t\t\t\t\tRange: ", df_aspchange_mdd.min(), "-", df_aspchange_mdd.max(),
+      "\t\t\tIQR: %.1f" % (df_aspchange_mdd.median() - (0.6745 * df_aspchange_mdd.std())), "-",
+      "%.1f" % (df_aspchange_mdd.median() + (0.6745 * df_aspchange_mdd.std())))
 
 
 
