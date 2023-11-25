@@ -96,6 +96,7 @@ print("\nOdds Ratio w/ CI's (e^b d/t logit model)\n", np.exp(conf), "\n")
 
 """
 df_boxplot = df.loc[:, ["diag_condition", "asp2change"]]
+df_boxplot = df_boxplot.sort_values("diag_condition")
 df_boxplot["diag_condition"] = df_boxplot["diag_condition"].replace(1, "Bipolar").replace(2, "Schizophrenia").replace(3, "Major Depressive Disorder")
 sns.set_palette(["#000000"])
 axs = sns.boxplot(data=df_boxplot, x="diag_condition", y="asp2change", width=0.65, fill=False)
@@ -128,6 +129,25 @@ print("asp2change / mdd: \t\tn =", len(df_aspchange_mdd), "\t\tMean: %.1f" % df_
       "\t\t\tIQR: %.1f" % (df_aspchange_mdd.median() - (0.6745 * df_aspchange_mdd.std())), "-",
       "%.1f" % (df_aspchange_mdd.median() + (0.6745 * df_aspchange_mdd.std())))
 
+
+# ------------------------------------------------------------
+# Step 4: Additional Visualizations
+# ------------------------------------------------------------
+
+"""
+df_barplot = pd.DataFrame(columns=["Diagnosis", "BMI", "Amount"])
+for diag in df["diag_condition"].unique():
+      for bmi in df["bmi_cat"].unique():
+            df_barplot.loc[len(df_barplot.index)] = [diag, bmi, len(df.loc[(df["diag_condition"] == diag) & (df["bmi_cat"] == bmi)])]
+df_barplot = df_barplot.sort_values("BMI").sort_values("Diagnosis")
+df_barplot["Diagnosis"] = df_barplot["Diagnosis"].replace(1, "Bipolar").replace(2, "Schizophrenia").replace(3, "Major Depressive Disorder")
+df_barplot["BMI"] = df_barplot["BMI"].replace(0, "Normal").replace(1, "Overweight/Obese")
+axs = sns.barplot(data=df_barplot, x="Diagnosis", y="Amount", hue="BMI")
+axs.set_xlabel("Diagnosis", labelpad=10)
+axs.set_ylabel("# of Clients", labelpad=10)
+plt.show()
+plt.clf()
+"""
 
 
 
