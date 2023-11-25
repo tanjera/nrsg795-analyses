@@ -59,17 +59,44 @@ print("\n")
 
 
 # ------------------------------------------------------------
+# Step 2, Option 4: Chi-Square of SMI by BMI
+# ------------------------------------------------------------
+
+print (">>>> Association of Diagnosis with BMI Category")
+df_chisq = df.loc[:, ["diag_condition", "bmi_cat"]]
+df_chisq["diag_condition"] = df_chisq["diag_condition"].replace(1, "Bipolar").replace(2, "Schizophrenia").replace(3, "Major Depressive Disorder")
+df_chisq["bmi_cat"] = df_chisq["bmi_cat"].replace(0, "Normal").replace(1, "Overweight/Obese")
+crosstab = pd.crosstab(df_chisq.loc[:, "diag_condition"], df_chisq.loc[:, "bmi_cat"])
+print("\nCrosstabulation of Diagnosis x BMI Category:\n", crosstab)
+
+chicont = stats.chi2_contingency(crosstab)
+print("\nChi-Square Test via stats.chi2_contingency:\n", chicont, "\n")
+
+exog = df.loc[:, ["dc_diag_2", "dc_diag_3"]]
+exog = sm.tools.add_constant(exog)
+endog = df.loc[:, "bmi_cat"]
+logreg = sm.Logit(endog, exog).fit()
+print (logreg.summary())
+print("DUMMY CODING KEY:")
+print("\tbipolar (1)\t\t\treference group")
+print("\tschizophrenia (2)\tdc_diag_2")
+print("\tmaj dep d/o (3)\t\tdc_diag_3")
+print("Odds Ratios (OR):\n", np.exp(logreg.params), "\n")
+
+# ------------------------------------------------------------
 # Step 3: Boxplot
 # ------------------------------------------------------------
 
+"""
 df_boxplot = df.loc[:, ["diag_condition", "asp2change"]]
 df_boxplot["diag_condition"] = df_boxplot["diag_condition"].replace(1, "Bipolar").replace(2, "Schizophrenia").replace(3, "Major Depressive Disorder")
 axs = sns.boxplot(data=df_boxplot, x="diag_condition", y="asp2change", width=0.65)
 axs.set_xlabel("Diagnosis", labelpad=10)
 axs.set_ylabel("Aspiration to Change Physical Activity", labelpad=10)
 plt.yticks(range(0, 51, 5))
-#plt.show()
+plt.show()
 plt.clf()
+"""
 
 print (">>>> Descriptive Statistics for Boxplot: Aspiration to Change per Diagnosis Group")
 df_aspchange_bipolar = df.loc[df["diag_condition"] == 1].loc[:, "asp2change"]
