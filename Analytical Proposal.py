@@ -59,7 +59,7 @@ print("\n")
 
 
 # ------------------------------------------------------------
-# Step 2, Option 4: Chi-Square of SMI by BMI
+# Step 2, Option 4: Chi-Square & Logistic Regression of SMI by BMI
 # ------------------------------------------------------------
 
 print (">>>> Association of Diagnosis with BMI Category")
@@ -81,7 +81,14 @@ print("DUMMY CODING KEY:")
 print("\tbipolar (1)\t\t\treference group")
 print("\tschizophrenia (2)\tdc_diag_2")
 print("\tmaj dep d/o (3)\t\tdc_diag_3")
-print("Odds Ratios (OR):\n", np.exp(logreg.params), "\n")
+
+params = logreg.params
+conf = logreg.conf_int()
+conf['Odds Ratio'] = params
+conf.columns = ['5% CI', '95% CI', 'Odds Ratio']
+# Odds Ratio (and its CI's) calculated as euler's e ^ model beta
+print("\nOdds Ratio w/ CI's (e^b d/t logit model)\n", np.exp(conf), "\n")
+
 
 # ------------------------------------------------------------
 # Step 3: Boxplot
@@ -90,7 +97,8 @@ print("Odds Ratios (OR):\n", np.exp(logreg.params), "\n")
 """
 df_boxplot = df.loc[:, ["diag_condition", "asp2change"]]
 df_boxplot["diag_condition"] = df_boxplot["diag_condition"].replace(1, "Bipolar").replace(2, "Schizophrenia").replace(3, "Major Depressive Disorder")
-axs = sns.boxplot(data=df_boxplot, x="diag_condition", y="asp2change", width=0.65)
+sns.set_palette(["#000000"])
+axs = sns.boxplot(data=df_boxplot, x="diag_condition", y="asp2change", width=0.65, fill=False)
 axs.set_xlabel("Diagnosis", labelpad=10)
 axs.set_ylabel("Aspiration to Change Physical Activity", labelpad=10)
 plt.yticks(range(0, 51, 5))
