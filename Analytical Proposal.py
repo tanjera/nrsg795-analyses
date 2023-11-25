@@ -134,7 +134,7 @@ print("asp2change / mdd: \t\tn =", len(df_aspchange_mdd), "\t\tMean: %.1f" % df_
 # Step 4: Additional Visualizations
 # ------------------------------------------------------------
 
-"""
+
 df_barplot = pd.DataFrame(columns=["Diagnosis", "BMI", "Amount"])
 for diag in df["diag_condition"].unique():
       for bmi in df["bmi_cat"].unique():
@@ -143,11 +143,12 @@ df_barplot = df_barplot.sort_values("BMI").sort_values("Diagnosis")
 df_barplot["Diagnosis"] = df_barplot["Diagnosis"].replace(1, "Bipolar").replace(2, "Schizophrenia").replace(3, "Major Depressive Disorder")
 df_barplot["BMI"] = df_barplot["BMI"].replace(0, "Normal").replace(1, "Overweight/Obese")
 axs = sns.barplot(data=df_barplot, x="Diagnosis", y="Amount", hue="BMI")
+plt.yticks(range(0, 20, 2))
 axs.set_xlabel("Diagnosis", labelpad=10)
 axs.set_ylabel("# of Clients", labelpad=10)
 plt.show()
 plt.clf()
-"""
+
 
 
 
