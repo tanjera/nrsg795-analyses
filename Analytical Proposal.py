@@ -21,7 +21,7 @@ df = pd.read_excel(r'C:\Users\Ibi\Google Drive\School, UMSON\2023.FA, NRSG 795 (
 # Step 1: Descriptive Statistics
 # ------------------------------------------------------------
 
-print (">>>> Descriptive Statistics")
+print (">>>> Descriptive Statistics\n")
 df_age = df.loc[:, "age"]
 print("age: \t\t\t\t\t\tn =", len(df_age), "\t\tMean: %.1f" % df_age.mean(), "\tMedian: %.1f" % df_age.median(),
       "\tSt Dev: %.1f" % df_age.std(), "\tRange: ", df_age.min(), "-", df_age.max())
@@ -87,8 +87,39 @@ conf = logreg.conf_int()
 conf['Odds Ratio'] = params
 conf.columns = ['5% CI', '95% CI', 'Odds Ratio']
 # Odds Ratio (and its CI's) calculated as euler's e ^ model beta
-print("\nOdds Ratio w/ CI's (e^b d/t logit model)\n", np.exp(conf), "\n")
+print("\nOdds Ratio w/ CI's (e^b d/t logit model)\n", np.exp(conf), "\n\n")
 
+
+# ------------------------------------------------------------
+# Step 2, Option 5: Correlation & Linear Regression of Asp2Change by # Steps @ 60 Days
+# ------------------------------------------------------------
+
+print (">>>> Association of Aspiration to Change with # of Steps at 60 Days\n")
+
+df_linreg = df.loc[:, ["asp2change", "60d_steps"]]
+
+pearson = stats.pearsonr(df_linreg.loc[:, "asp2change"], df_linreg.loc[:, "60d_steps"])
+print("Pearson r: \t\t\tr = %.2f" % pearson.statistic, "\t\tp = %.4f\n" % pearson.pvalue)
+
+"""
+axs = sns.histplot(data=df_linreg.loc[:, "asp2change"], bins=10)
+axs.set_xlabel('Aspiration to Change', fontsize=10)
+plt.show()
+axs.get_figure().clf()
+
+axs = sns.histplot(data=df_linreg.loc[:, "60d_steps"], bins=10)
+axs.set_xlabel('Steps Taken at 60 Days', fontsize=10)
+plt.show()
+axs.get_figure().clf()
+"""
+
+# Linear regression
+exog = df_linreg.loc[:, "asp2change"]
+endog = df_linreg.loc[:, "60d_steps"]
+exog = sm.tools.add_constant(exog)
+
+linreg = sm.OLS(endog, exog).fit()
+print(linreg.summary(), "\n\n")
 
 # ------------------------------------------------------------
 # Step 3: Boxplot
@@ -107,7 +138,7 @@ plt.show()
 plt.clf()
 """
 
-print (">>>> Descriptive Statistics for Boxplot: Aspiration to Change per Diagnosis Group")
+print (">>>> Descriptive Statistics for Boxplot: Aspiration to Change per Diagnosis Group\n")
 df_aspchange_bipolar = df.loc[df["diag_condition"] == 1].loc[:, "asp2change"]
 print("asp2change / bipolar: \tn =", len(df_aspchange_bipolar), "\t\tMean: %.1f" % df_aspchange_bipolar.mean(), "\tMedian: %.1f" % df_aspchange_bipolar.median(),
       "\tSt Dev: %.1f" % df_aspchange_bipolar.std(),
@@ -134,7 +165,8 @@ print("asp2change / mdd: \t\tn =", len(df_aspchange_mdd), "\t\tMean: %.1f" % df_
 # Step 4: Additional Visualizations
 # ------------------------------------------------------------
 
-
+"""
+# Barplot of Diagnosis by amount Binned by BMI Category
 df_barplot = pd.DataFrame(columns=["Diagnosis", "BMI", "Amount"])
 for diag in df["diag_condition"].unique():
       for bmi in df["bmi_cat"].unique():
@@ -145,9 +177,29 @@ df_barplot["BMI"] = df_barplot["BMI"].replace(0, "Normal").replace(1, "Overweigh
 axs = sns.barplot(data=df_barplot, x="Diagnosis", y="Amount", hue="BMI")
 plt.yticks(range(0, 20, 2))
 axs.set_xlabel("Diagnosis", labelpad=10)
-axs.set_ylabel("# of Clients", labelpad=10)
+axs.set_ylabel("Amount of Clients", labelpad=10)
 plt.show()
 plt.clf()
+"""
+
+# Scatterplot of Asp2change by Steps at 60d w/ Linreg slope
+df_linreg = df.loc[:, ["asp2change", "60d_steps"]]
+exog = df_linreg.loc[:, "asp2change"]
+endog = df_linreg.loc[:, "60d_steps"]
+exog = sm.tools.add_constant(exog)
+linreg = sm.OLS(endog, exog).fit()
+
+"""
+axs = sns.scatterplot(x="asp2change", y="60d_steps", data=df_linreg, palette="tab10", legend=False, alpha=0.75)
+axs.set_xlabel('Aspiration to Change Scores', fontsize=10)
+axs.set_ylabel('Steps Taken at 60 Days', fontsize=10)
+xseq = np.linspace(20, 50, num=100)
+axs.plot(xseq, linreg.params["const"] + linreg.params["asp2change"] * xseq, color="#3590ae", lw=1.5);
+plt.show()
+axs.get_figure().clf()
+"""
+
+
 
 
 
