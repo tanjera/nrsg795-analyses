@@ -99,7 +99,20 @@ print (">>>> Association of Aspiration to Change with # of Steps at 60 Days\n")
 df_linreg = df.loc[:, ["asp2change", "60d_steps"]]
 
 pearson = stats.pearsonr(df_linreg.loc[:, "asp2change"], df_linreg.loc[:, "60d_steps"])
-print("Pearson r: \t\t\tr = %.2f" % pearson.statistic, "\t\tp = %.4f\n" % pearson.pvalue)
+print("Pearson r: \t\t\t\t\tr = %.2f" % pearson.statistic, "\t\tp = %.4f" % pearson.pvalue)
+normaltest = stats.normaltest(df_linreg.loc[:, "asp2change"])
+print("Normal Test (asp2change): \tf = %.2f" % normaltest.statistic, "\t\tp = %.4f" % normaltest.pvalue)
+skew = stats.skew(df_linreg.loc[:, "asp2change"])
+print("Skew (asp2change): \t\t\tf = %.2f" % skew)
+kurtosis = stats.kurtosis(df_linreg.loc[:, "asp2change"])
+print("Kurtosis (asp2change): \t\tf = %.2f" % kurtosis)
+normaltest = stats.normaltest(df_linreg.loc[:, "60d_steps"])
+print("Normal Test (60d_steps): \tf = %.2f" % normaltest.statistic, "\t\tp = %.4f" % normaltest.pvalue)
+skew = stats.skew(df_linreg.loc[:, "60d_steps"])
+print("Skew (60d_steps): \t\t\tf = %.2f" % skew)
+kurtosis = stats.kurtosis(df_linreg.loc[:, "60d_steps"])
+print("Kurtosis (60d_steps): \t\tf = %.2f" % kurtosis)
+print("")
 
 """
 axs = sns.histplot(data=df_linreg.loc[:, "asp2change"], bins=10)
