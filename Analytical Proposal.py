@@ -132,7 +132,10 @@ endog = df_linreg.loc[:, "60d_steps"]
 exog = sm.tools.add_constant(exog)
 
 linreg = sm.OLS(endog, exog).fit()
-print(linreg.summary(), "\n\n")
+print(linreg.summary(), "\n")
+
+heterobp = sm.stats.het_breuschpagan(linreg.resid, linreg.model.exog)
+print("Heteroscedasticity (BP): \tf = %.2f" % heterobp[2], "\t\tp = %.4f" % heterobp[3], "\n\n")
 
 # ------------------------------------------------------------
 # Step 3: Boxplot
