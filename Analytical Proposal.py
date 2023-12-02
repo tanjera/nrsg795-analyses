@@ -70,7 +70,9 @@ crosstab = pd.crosstab(df_chisq.loc[:, "diag_condition"], df_chisq.loc[:, "bmi_c
 print("\nCrosstabulation of Diagnosis x BMI Category:\n", crosstab)
 
 chicont = stats.chi2_contingency(crosstab)
-print("\nChi-Square Test via stats.chi2_contingency:\n", chicont, "\n")
+print("\nChi-Square Test via stats.chi2_contingency:\n", chicont)
+cramerv = stats.contingency.association(crosstab, method='cramer')
+print("Cramer's V:\t%.2f" % cramerv, "\n")
 
 exog = df.loc[:, ["dc_diag_2", "dc_diag_3"]]
 exog = sm.tools.add_constant(exog)
